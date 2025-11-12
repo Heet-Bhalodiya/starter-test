@@ -29,19 +29,17 @@ export const metadata = {
 }
 
 const RootLayout = async (props: ChildrenType & { params: Promise<{ lang: string }> }) => {
-  const params = await props.params
+  const { lang } = await props.params
 
   const { children } = props
 
-  const { lang } = params as { lang: Locale }
-
   const headersList = await headers()
 
-  const direction = i18n.langDirection[lang]
+  const direction = i18n.langDirection[lang as Locale]
   const systemMode = await getSystemMode()
 
   return (
-    <TranslationWrapper headersList={headersList} lang={lang}>
+    <TranslationWrapper headersList={headersList} lang={lang as Locale}>
       <html id='__next' lang="en" dir={direction} suppressHydrationWarning>
         <body className='flex is-full min-bs-full flex-auto flex-col'>
           <InitColorSchemeScript attribute='data' defaultMode={systemMode} />

@@ -24,16 +24,15 @@ import type { Locale } from '@/configs/i18n'
 import { getMode, getSystemMode } from '@core/utils/serverHelpers'
 
 const Layout = async (props: ChildrenType & { params: Promise<{ lang: string }> }) => {
-  const params = await props.params
+  const { lang } = await props.params
 
   const { children } = props
-  const { lang } = params as { lang: Locale }
 
   // Vars
   const direction = 'ltr'
   const mode = await getMode()
   const systemMode = await getSystemMode()
-  const dictionary = await getDictionary(lang)
+  const dictionary = await getDictionary(lang as Locale)
 
   return (
     <Providers direction={direction}>

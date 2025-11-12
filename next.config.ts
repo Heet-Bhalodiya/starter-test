@@ -1,26 +1,26 @@
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
-  basePath: process.env.BASEPATH,
+  basePath: process.env.NEXT_PUBLIC_BASEPATH || '',
+  env: {
+    NEXT_PUBLIC_BASEPATH: process.env.NEXT_PUBLIC_BASEPATH || '',
+  },
   redirects: async () => {
     return [
       {
         source: '/',
         destination: '/en/home',
-        permanent: true,
-        locale: false
+        permanent: true
       },
       {
         source: '/:lang(en|fr|ar)',
         destination: '/:lang/home',
-        permanent: true,
-        locale: false
+        permanent: true
       },
       {
         source: '/:path((?!en|fr|ar|front-pages|images|api|favicon.ico).*)*',
         destination: '/en/:path*',
-        permanent: true,
-        locale: false
+        permanent: true
       }
     ]
   }
