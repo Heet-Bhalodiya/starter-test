@@ -1,3 +1,5 @@
+import { headers } from 'next/headers'
+
 // MUI Imports
 import InitColorSchemeScript from '@mui/material/InitColorSchemeScript'
 
@@ -16,30 +18,37 @@ import '@/app/globals.css'
 // Generated Icon CSS Imports
 import '@assets/iconify-icons/generated-icons.css'
 
+import { i18n } from '@configs/i18n'
+import type { Locale } from '@configs/i18n'
+import TranslationWrapper from '@/hocs/TranslationWrapper'
+
 export const metadata = {
   title: 'Materio - Material Design Next.js Admin Template',
   description:
     'Materio - Material Design Next.js Admin Dashboard Template - is the most developer friendly & highly customizable Admin Dashboard Template based on MUI v5.'
 }
 
-const RootLayout = async (props: ChildrenType) => {
-
+const RootLayout = async (props: ChildrenType & { params: Promise<{ lang: string }> }) => {
+  const params = await props.params
 
   const { children } = props
 
-  // Vars
+  const { lang } = params as { lang: Locale }
 
+  const headersList = await headers()
+
+  const direction = i18n.langDirection[lang]
   const systemMode = await getSystemMode()
-  const direction = 'ltr'
 
   return (
-
-    <html id='__next' lang="en" dir={direction} suppressHydrationWarning>
-      <body className='flex is-full min-bs-full flex-auto flex-col'>
-        <InitColorSchemeScript attribute='data' defaultMode={systemMode} />
-        {children}
-      </body>
-    </html>
+    <TranslationWrapper headersList={headersList} lang={lang}>
+      <html id='__next' lang="en" dir={direction} suppressHydrationWarning>
+        <body className='flex is-full min-bs-full flex-auto flex-col'>
+          <InitColorSchemeScript attribute='data' defaultMode={systemMode} />
+          {children}
+        </body>
+      </html>
+    </TranslationWrapper>
 
   )
 }

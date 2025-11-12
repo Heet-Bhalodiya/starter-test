@@ -17,19 +17,23 @@ import Navbar from '@components/layout/vertical/Navbar'
 import VerticalFooter from '@components/layout/vertical/Footer'
 import HorizontalFooter from '@components/layout/horizontal/Footer'
 import ScrollToTop from '@core/components/scroll-to-top'
+import { getDictionary } from '@/utils/getDictionary'
+import type { Locale } from '@/configs/i18n'
 
 // Util Imports
 import { getMode, getSystemMode } from '@core/utils/serverHelpers'
 
-const Layout = async (props: ChildrenType) => {
-
+const Layout = async (props: ChildrenType & { params: Promise<{ lang: string }> }) => {
+  const params = await props.params
 
   const { children } = props
+  const { lang } = params as { lang: Locale }
 
   // Vars
   const direction = 'ltr'
   const mode = await getMode()
   const systemMode = await getSystemMode()
+  const dictionary = await getDictionary(lang)
 
   return (
     <Providers direction={direction}>
@@ -37,7 +41,7 @@ const Layout = async (props: ChildrenType) => {
         systemMode={systemMode}
         verticalLayout={
           <VerticalLayout
-            navigation={<Navigation mode={mode} />}
+            navigation={<Navigation mode={mode} dictionary={dictionary} />}
             navbar={<Navbar />}
             footer={<VerticalFooter />}
           >
@@ -45,7 +49,7 @@ const Layout = async (props: ChildrenType) => {
           </VerticalLayout>
         }
         horizontalLayout={
-          <HorizontalLayout header={<Header />} footer={<HorizontalFooter />}>
+          <HorizontalLayout header={<Header dictionary={dictionary} />} footer={<HorizontalFooter />}>
             {children}
           </HorizontalLayout>
         }

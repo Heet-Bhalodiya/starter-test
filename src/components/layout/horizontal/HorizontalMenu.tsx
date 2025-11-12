@@ -1,3 +1,5 @@
+import { useParams } from 'next/navigation'
+
 // MUI Imports
 import { useTheme } from '@mui/material/styles'
 
@@ -23,6 +25,7 @@ import menuItemStyles from '@core/styles/horizontal/menuItemStyles'
 import verticalNavigationCustomStyles from '@core/styles/vertical/navigationCustomStyles'
 import verticalMenuItemStyles from '@core/styles/vertical/menuItemStyles'
 import verticalMenuSectionStyles from '@core/styles/vertical/menuSectionStyles'
+import type { getDictionary } from '@/utils/getDictionary'
 
 type RenderExpandIconProps = {
   level?: number
@@ -45,16 +48,18 @@ const RenderVerticalExpandIcon = ({ open, transitionDuration }: RenderVerticalEx
   </StyledVerticalNavExpandIcon>
 )
 
-const HorizontalMenu = () => {
+const HorizontalMenu = ({ dictionary }: { dictionary: Awaited<ReturnType<typeof getDictionary>> }) => {
   // Hooks
   const verticalNavOptions = useVerticalNav()
   const theme = useTheme()
   const { settings } = useSettings()
-  
+  const params = useParams()
+  const { lang: locale } = params
+
   // Vars
   const { skin } = settings
   const { transitionDuration } = verticalNavOptions
-  
+
   return (
     <HorizontalNav
       switchToVertical
@@ -83,13 +88,13 @@ const HorizontalMenu = () => {
           menuSectionStyles: verticalMenuSectionStyles(verticalNavOptions, theme)
         }}
       >
-      <MenuItem href='/' icon={<i className='ri-home-smile-line' />}>
-        Home
-      </MenuItem>
-      <MenuItem href='/about' icon={<i className='ri-information-line' />}>
-        About
-      </MenuItem>
-    </Menu>
+        <MenuItem href={`/${locale}/home`} icon={<i className='ri-home-smile-line' />}>
+          {dictionary['navigation'].home}
+        </MenuItem>
+        <MenuItem href={`/${locale}/about`} icon={<i className='ri-information-line' />}>
+          {dictionary['navigation'].about}
+        </MenuItem>
+      </Menu>
 
       {/* <Menu
         rootStyles={menuRootStyles(theme)}
