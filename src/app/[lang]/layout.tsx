@@ -28,6 +28,10 @@ export const metadata = {
     'Materio - Material Design Next.js Admin Dashboard Template - is the most developer friendly & highly customizable Admin Dashboard Template based on MUI v5.'
 }
 
+export async function generateStaticParams() {
+  return i18n.locales.map((locale) => ({ lang: locale }))
+}
+
 const RootLayout = async (props: ChildrenType & { params: Promise<{ lang: string }> }) => {
   const { lang } = await props.params
 

@@ -1,29 +1,22 @@
-import type { NextConfig } from 'next'
+import type { NextConfig } from "next";
+
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
 
 const nextConfig: NextConfig = {
-  basePath: process.env.NEXT_PUBLIC_BASEPATH || '',
+  basePath: basePath,
+  assetPrefix: basePath,
   env: {
-    NEXT_PUBLIC_BASEPATH: process.env.NEXT_PUBLIC_BASEPATH || '',
+    NEXT_PUBLIC_BASE_PATH: basePath,
   },
-  redirects: async () => {
+  async redirects() {
     return [
       {
         source: '/',
         destination: '/en/home',
-        permanent: true
+        permanent: false,
       },
-      {
-        source: '/:lang(en|fr|ar)',
-        destination: '/:lang/home',
-        permanent: true
-      },
-      {
-        source: '/:path((?!en|fr|ar|front-pages|images|api|favicon.ico).*)*',
-        destination: '/en/:path*',
-        permanent: true
-      }
     ]
-  }
-}
+  },
+};
 
-export default nextConfig
+export default nextConfig;
