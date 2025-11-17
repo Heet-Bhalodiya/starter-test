@@ -26,7 +26,6 @@ import type { getDictionary } from '@/utils/getDictionary'
 import navigationCustomStyles from '@core/styles/vertical/navigationCustomStyles'
 
 type Props = {
-  mode: Mode
   dictionary: Awaited<ReturnType<typeof getDictionary>>
 }
 
@@ -49,15 +48,13 @@ const StyledBoxForShadow = styled('div')(({ theme }) => ({
 
 const Navigation = (props: Props) => {
   // Props
-  const { mode } = props
+  const { dictionary } = props
 
   // Hooks
   const verticalNavOptions = useVerticalNav()
   const { updateSettings, settings } = useSettings()
   const { mode: muiMode, systemMode: muiSystemMode } = useColorScheme()
   const theme = useTheme()
-
-  const { dictionary } = props // get the dictionary from destructuring props
 
   // Refs
   const shadowRef = useRef(null)
@@ -66,7 +63,7 @@ const Navigation = (props: Props) => {
   const { isCollapsed, isHovered, collapseVerticalNav, isBreakpointReached } = verticalNavOptions
   const isSemiDark = settings.semiDark
 
-  const currentMode = muiMode === 'system' ? muiSystemMode : muiMode || mode
+  const currentMode = muiMode === 'system' ? muiSystemMode : muiMode || settings.mode
 
   const isDark = currentMode === 'dark'
 

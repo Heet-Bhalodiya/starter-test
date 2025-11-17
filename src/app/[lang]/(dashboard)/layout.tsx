@@ -19,16 +19,7 @@ import HorizontalFooter from '@components/layout/horizontal/Footer'
 import ScrollToTop from '@core/components/scroll-to-top'
 import { getDictionary } from '@/utils/getDictionary'
 
-// Util Imports
-import { getMode, getSystemMode } from '@core/utils/serverHelpers'
-
-import { i18n } from '@configs/i18n'
 import type { Locale } from '@configs/i18n'
-
-export async function generateStaticParams() {
-  return i18n.locales.map((locale) => ({ lang: locale }))
-}
-
 
 const Layout = async (props: ChildrenType & { params: Promise<{ lang: string }> }) => {
   const { lang } = await props.params
@@ -37,17 +28,14 @@ const Layout = async (props: ChildrenType & { params: Promise<{ lang: string }> 
 
   // Vars
   const direction = 'ltr'
-  const mode = await getMode()
-  const systemMode = await getSystemMode()
   const dictionary = await getDictionary(lang as Locale)
 
   return (
     <Providers direction={direction}>
       <LayoutWrapper
-        systemMode={systemMode}
         verticalLayout={
           <VerticalLayout
-            navigation={<Navigation mode={mode} dictionary={dictionary} />}
+            navigation={<Navigation dictionary={dictionary} />}
             navbar={<Navbar />}
             footer={<VerticalFooter />}
           >
